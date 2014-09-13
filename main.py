@@ -17,13 +17,29 @@
 import sys
 sys.path.append('handlers/')
 import webapp2
-from BaseHandler import BaseRequestHandler
+from urlparse import urlparse
+import logging
+from BaseHandler import BaseRequestHandler, LoginHandler
 
 class MainHandler(BaseRequestHandler):
     def get(self):
+        logging.error(self.request)
         self.render('index.html')
-        self.write('Hello world!')
+        #self.write('Hello world!')
+
+class MainHandler(BaseRequestHandler):
+    def get(self):
+        logging.error(self.request)
+        page = urlparse(self.request.url).path
+        if page == '/':
+            self.render('index.html')
+        else:
+            self.render(page)
+        #self.write('Hello world!') 
+        
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/fb/oauth_callback/?',LoginHandler),
+    ('/.*', MainHandler)
+
 ], debug=True)

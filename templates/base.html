@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Lifelong Wellbeing Lab</title>
+		<title>Lifelong Wellbeing Lab {% block title %}{% endblock %}</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="description" content="" />
 		<meta name="keywords" content="" />
@@ -69,6 +69,12 @@
 				</div>
 				
 			<!-- Banner -->
+                        {% block banner %}
+        
+       
+        
+        
+                       
 				<div id="banner">
 					<section class="container">
 						<h2>Lifelong Wellbeing Lab</h2>
@@ -76,109 +82,24 @@
 						<p></p>
 					</section>
 				</div>
+                
+                 {% endblock %}
 
 			</div>
 		
-		<!-- Section One -->
-			<div class="wrapper style2">
-				<section class="container">
-					<div class="row double">
-						<div class="6u" id="quotation">
-							<header class="major">
-								<h2>The great secret old people share is that your body changes,<br> but you don’t change at all.</h2>
-								<span class="byline">Doris Lessing, 2007 Nobel prize in literature.</span>
-							</header>
-						</div>
-						<div class="6u">
-							<h3>Our passion</h3>
-							<p>We want people to help people have fun and enjoy, savour life. We want to make sure people can’t wait to get up in the morning. We work specifically with older adults, because there worked so hard and surely deserve some fun..</p>
-							<a href="#" class="button">Read our mission statement</a>
-						</div>
-					</div>
-				</section>
-			</div>
+		<!-- content -->
 
-		<!-- Section Two 
-			<div class="wrapper style3">
-				<section class="container">
-					<header class="major">
-						<h2>Studies and Interventions</h2>
-					</header>
-					<p>We work by studies and interventions. Studies try to find out what makes older adults - and their family members - happier or worried. Interventions use technology to help people be active participants to society.</p>
-					<a href="#" class="button alt">See what we have achieved so far</a>
-				</section>
-			</div>
--->
-
-		<!-- Section Three -->
-			<div class="wrapper style4">
-				<section class="container">
-					<header class="major">
-						<h2>Here is what we are cooking</h2>
-						<span class="byline">Work in progress and results.</span>
-					</header>
-					<div class="row flush">
-						<div class="4u">
-							<ul class="special-icons">
-								<li>
-									<span class="fa fa-cogs"></span>
-									<h3>"Master" happiness study</h3>
-									<p>A longitudinal study on over a thousand Siberian older adults.</p>
-								</li>
-								<li>
-									<span class="fa fa-wrench"></span>
-									<h3>Activity and happiness</h3>
-									<p>Maecenas ligula. Pellentesque viverra vulputate enim. Aliquam erat volutpat liguala.</p>
-								</li>
-								<li>
-									<span class="fa fa-leaf"></span>
-									<h3>Promoting active lifestyles</h3>
-									<p>If activity is related to happiness, how can older adults get active?</p>
-								</li>
-							</ul>
-						</div>
-						<div class="4u">
-							<ul class="special-icons">
-								<li>
-									<span class="fa fa-cogs"></span>
-									<h3>Love and happiness</h3>
-									<p>We study love in later life and its connection with happiness.</p>
-								</li>
-								<li>
-									<span class="fa fa-wrench"></span>
-									<h3>Life interactions and happiness</h3>
-									<p>We develop solutions to help older adults be connected with and contribute to society.</p>
-								</li>
-								<li>
-									<span class="fa fa-leaf"></span>
-									<h3>The irrationality of happiness</h3>
-									<p>We compare what makes us happy, what we think makes us happy, and what we do to make us happy.</p>
-								</li>
-							</ul>
-						</div>
-						<div class="4u">
-							<ul class="special-icons">
-								<li>
-									<span class="fa fa-cogs"></span>
-									<h3>Happy Shopping</h3>
-									<p>Which purchases give us greater <br>wellbeing? </p>
-								</li>
-								<li>
-									<span class="fa fa-wrench"></span>
-									<h3>Do you <i>look</i> happy?</h3>
-									<p>Do people with greater wellbeing also look happier?</p>
-								</li>
-								<li>
-									<span class="fa fa-leaf"></span>
-									<h3>Mens sana in corpore sano</h3>
-									<p>We examine and experiment on the relation between mindfulness and happiness in older adults.</p>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</section>
-			</div>
-
+        
+        
+        {% block content %}
+        
+       
+        
+        
+         {% endblock %}
+        
+        
+        
 	<!-- Footer -->
 		<div id="footer">
 			<section class="container">
