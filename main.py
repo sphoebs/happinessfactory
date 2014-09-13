@@ -21,6 +21,7 @@ from BaseHandler import BaseRequestHandler
 
 class MainHandler(BaseRequestHandler):
     def get(self):
+        self.render('index.html')
         self.write('Hello world!')
 
 app = webapp2.WSGIApplication([
