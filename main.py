@@ -16,17 +16,34 @@
 #
 import sys
 sys.path.append('handlers/')
+sys.path.append('DB/')
+
 import webapp2
 from urlparse import urlparse
 import logging
-from BaseHandler import BaseRequestHandler, LoginHandler
+from BaseHandler import BaseRequestHandler, LoginManager
+from PUser import PUser
 
-class MainHandler(BaseRequestHandler):
+
+class LoginHandler(BaseRequestHandler):
     def get(self):
-        logging.error(self.request)
-        self.render('index.html')
-        #self.write('Hello world!')
-
+        
+        if '/fb/oauth_callback' in self.request.url:
+            logging.error("\n \n FB request: "+str(self.request.url))
+            oauth_user_dictionary, access_token, errors = LoginManager.handle_fb_callback(self.request)
+            user, result = PUser.FB_add_or_get(oauth_user_dictionary, access_token)
+        
+        elif '/google/oauth_callback' in self.request.url:
+            #oauth_user_dict, access_token, errors = LoginManager.handle_fb_callback(self.request)
+            #user, result = PUser.FB_add_or_get(oauth_user_dict, access_token)
+            #set cookie
+            #redirect
+            pass
+        else:
+            logging.error('illegal callback invocation')
+        
+              
+        
 class MainHandler(BaseRequestHandler):
     def get(self):
         logging.error(self.request)
@@ -40,6 +57,6 @@ class MainHandler(BaseRequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/fb/oauth_callback/?',LoginHandler),
+    ('/google/oauth_callback/?',LoginHandler),
     ('/.*', MainHandler)
-
 ], debug=True)

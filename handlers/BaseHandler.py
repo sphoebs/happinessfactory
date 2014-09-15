@@ -4,6 +4,13 @@ import os
 import jinja2
 import logging
 from google.appengine.api import urlfetch
+import urllib2
+from urlparse import urlparse
+import json
+import secrets
+
+from GFuser import GFUser
+
 
 template_dir=os.path.join(os.path.dirname(__file__), '../templates')
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -46,29 +53,30 @@ class BaseRequestHandler(webapp2.RequestHandler):
        # Save all sessions.
        #self.session_store.save_sessions(self.response)
 
-class LoginHandler(BaseRequestHandler):
-    
-    def get (self):
-        logging.error(self.request.arguments())
-        self.write(self.request.arguments())
+class LoginManager():
+    @staticmethod
+    def handle_fb_callback (request):
+        
         #verify csrf state
         
         #extract access token from the parameters
-        code = self.request.get('code')
-        self.write('code:'+ code)
+        code = request.get('code')
+        callback_url=request.url.split('?')[0]
+ 
         
         #exchange code for token
-        url="https://graph.facebook.com/oauth/access_token?client_id=604940769614321&redirect_uri=http://cnn.com}&client_secret=044fcf7b30beb0a91505b5c76afe4c14&code="+code
-        result=urlfetch(url)
-        self.write(result)
+        url="https://graph.facebook.com/oauth/access_token?client_id=604940769614321&redirect_uri="+callback_url+"&client_secret="+secrets.FB_APP_SECRET+"&code="+code
         
         
-        #inspect access token
-        #GET graph.facebook.com/debug_token?input_token={token-to-inspect}&access_token={app-token-or-admin-token}
-        
-        
-        
-        #self.redirect('http://cnn.com?token='+token)
-        pass
+        result = urllib2.urlopen(url).read()
+        if result:
+            access_token, expiration= result.lstrip("access_token=").split("&expires=")
+            url="https://graph.facebook.com/me?access_token="+access_token
+            return json.loads(urllib2.urlopen(url).read()), access_token, None
+        else: return None, None, 'No Result'
+            
+            
+ 
+
     
     
