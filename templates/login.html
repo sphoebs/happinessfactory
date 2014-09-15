@@ -1,12 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}- Publications{% endblock %}
-{% block head %}
-    {{ super() }}
-    <style type="text/css">
-        .important { color: #336699; }
-    </style>
-{% endblock %}
+
 {% block content %}
 <div class="wrapper style2">
     <h1>Index</h1>
@@ -19,12 +14,12 @@
       <a href="https://www.facebook.com/dialog/oauth?
     client_id=604940769614321&redirect_uri=http://localhost:17080/fb/oauth_callback">offline version</a>
             
-             <a href="{{fb_login_url}}">obatainer version</a> 
+             <a href="{{fb_login_url|safe}}">fb version</a> 
             
                   <a href="https://www.facebook.com/dialog/oauth?
     client_id=604940769614321&redirect_uri=http://localhost:17080/fb/oauth_callback">offline version</a>
             
-             <a href="{{google_login_url}}">google version</a> 
+             <a href="{{google_login_url|safe}}">google version</a> 
     </p>
     </div>
 {% endblock %} 

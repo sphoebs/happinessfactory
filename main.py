@@ -30,7 +30,9 @@ class LoginHandler(BaseRequestHandler):
         
         if '/fb/oauth_callback' in self.request.url:
             logging.error("\n \n FB request: "+str(self.request.url))
-            oauth_user_dictionary, access_token, errors = LoginManager.handle_fb_callback(self.request)
+            
+            oauth_user_dictionary, access_token, errors = LoginManager.handle_oauth_callback(self.request, 'facebook')
+            
             user, result = PUser.FB_add_or_get(oauth_user_dictionary, access_token)
         
         elif '/google/oauth_callback' in self.request.url:
@@ -46,12 +48,17 @@ class LoginHandler(BaseRequestHandler):
         
 class MainHandler(BaseRequestHandler):
     def get(self):
+        
+        
         logging.error(self.request)
         page = urlparse(self.request.url).path
+        logging.error(LoginManager.get_login_URL(self.request, 'facebook'))
+        params = {'fb_login_url': LoginManager.get_login_URL(self.request, 'facebook'),
+                 'google_login_url': LoginManager.get_login_URL(self.request, 'google')}
         if page == '/':
-            self.render('index.html')
+            self.render('index.html', params)
         else:
-            self.render(page)
+            self.render(page, params)
         #self.write('Hello world!') 
         
 
