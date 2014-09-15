@@ -6,8 +6,18 @@ import logging
 from google.appengine.api import urlfetch
 import urllib2
 from urlparse import urlparse
+from urllib import urlencode
 import json
 import secrets
+
+
+import time
+import base64
+import hmac
+import hashlib
+import email.utils
+import Cookie
+
 
 from GFuser import GFUser
 
@@ -20,7 +30,53 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 
+def cookie_signature(*parts):
+        """Generates a cookie signature.
+        We use the  app secret since it is different for every app (so
+        people using this example don't accidentally all use the same secret).
+        """
+        hash = hmac.new(secrets.ENCRYPTION_SECRET, digestmod=hashlib.sha1)
+        for part in parts:
+            hash.update(part)
+        return hash.hexdigest()
 
+
+def set_cookie(response, name, value, domain=None, path="/", expires=None, encrypt=True):
+        """Generates and signs a cookie for the give name/value"""
+        timestamp = str(int(time.time()))
+        value = base64.b64encode(value)
+        signature = cookie_signature(value, timestamp)
+        cookie = Cookie.BaseCookie()
+        cookie[name] = "|".join([value, timestamp, signature])
+        cookie[name]["path"] = path
+        if domain:
+            cookie[name]["domain"] = domain
+        if expires:
+            cookie[name]["expires"] = email.utils.formatdate(
+                expires, localtime=False, usegmt=True)
+        response.headers.add_header("Set-Cookie", cookie.output()[12:])
+        
+        
+def parse_cookie(value, cookie_duration):
+    """Parses and verifies a cookie value from set_cookie"""
+
+    if not value:
+        return None
+
+    parts = value.split("|")
+    if len(parts) != 3:
+        return None
+    if cookie_signature(parts[0], parts[1]) != parts[2]:
+        logging.warning("Invalid cookie signature %r", value)
+        return None
+    timestamp = int(parts[1])
+    if timestamp < time.time() - cookie_duration:
+        logging.warning("Expired cookie %r", value)
+        return None
+    try:
+        return base64.b64decode(parts[0]).strip()
+    except:
+        return None
 
 class BaseRequestHandler(webapp2.RequestHandler):
     
@@ -74,7 +130,7 @@ class LoginManager():
             
         
         if provider == 'google':
-            url= GOOGLE_LOGIN_URI + "?client_id="+secrets.GOOGLE_APP_ID+"&redirect_uri="+callback_url+"/google/oauth_callback"+"&response_type=code&scope=email"
+            url= GOOGLE_LOGIN_URI + "?client_id="+secrets.GOOGLE_APP_ID+"&redirect_uri="+callback_url+"/google/oauth_callback"+"&response_type=code&scope=email%20profile"
             
             
         return url
@@ -131,7 +187,7 @@ class LoginManager():
                 auth_info=json.loads(resp.content)
                 logging.error('auth_info')
                 logging.error(auth_info)
-                    
+                access_token =   auth_info['access_token']  
                     
                 url='https://www.googleapis.com/oauth2/v3/userinfo?{0}'
                 target_url = url.format(urlencode({'access_token':auth_info['access_token']}))

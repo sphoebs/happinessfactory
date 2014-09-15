@@ -13,11 +13,12 @@ class GFUser(ndb.Model):
     last_name = ndb.StringProperty(required=True)
     full_name = ndb.StringProperty(required=True)
     email = ndb.StringProperty(required=True)
+    locale = ndb.StringProperty()
     
     fb_user_id = ndb.StringProperty() #facebook user-id
-    fb_first_name = ndb.StringProperty(required=True)
-    fb_last_name = ndb.StringProperty(required=True)
-    fb_email = ndb.StringProperty(required=True)
+    fb_first_name = ndb.StringProperty()
+    fb_last_name = ndb.StringProperty()
+    fb_email = ndb.StringProperty()
     fb_profile = ndb.StringProperty()
     fb_locale = ndb.StringProperty()
     fb_name = ndb.StringProperty()
@@ -25,9 +26,12 @@ class GFUser(ndb.Model):
     fb_access_token = ndb.StringProperty()
     
     google_user_id = ndb.StringProperty()
-    picture=ndb.StringProperty()
+    google_first_name = ndb.StringProperty()
+    google_last_name = ndb.StringProperty()
+    google_email = ndb.StringProperty()
+    google_picture=ndb.StringProperty()
     google_profile = ndb.StringProperty()
-    locale = ndb.StringProperty()
+
     google_locale = ndb.StringProperty()
     google_access_token = ndb.StringProperty()
     
@@ -37,93 +41,99 @@ class GFUser(ndb.Model):
     def get_all_users():
         return GFUser.query()
     
+    @staticmethod
+    def get_by_user_id(user_id):
+        return GFUser.query(GFUser.user_id==user_id).get()  
+    
+    
     
     @staticmethod
-    def FB_add_or_get(user_response, access_token, update=False):
+    def add_or_get_user(user_response, access_token, provider, update=False):
         '''
         adds the user, if new, and returns it,  else just returns the user
         '''
-        user_query = GFUser.query(ndb.OR(
-                                    GFUser.fb_user_id == user_response['id'],
-                                    GFUser.email == user_response['email'].lower()
-                                    )
-                            )
-        
-        user= user_query.get()
-            
-        if  user and user.fb_user_id: 
-            
-            user.fb_access_token = access_token
-            return user, ['FB_user_exists']
-        
         status=[]
         
-        if not user:
-            user= GFUser()
-            user.user_id="FB_"+user_response['id']
-            user.first_name = user_response['first_name']
-            user.last_name = user_response['last_name']
-            user.email = user_response['email']
-            user.full_name = user_response['name']
-            status.append('user_added')
-         
-        else: status.append('FB_user_data_added')
-            
-        #add FB details
-        user.fb_user_id = user_response['id']
-        user.fb_first_name = user_response['first_name']
-        user.fb_last_name = user_response['last_name']
-        user.fb_email = user_response['email']
-        user.fb_profile = user_response['link']
-        user.fb_locale = user_response['locale']
-        user.fb_name = user_response['name']
-        user.fb_gender = user_response['gender']
-        user.fb_access_token = access_token
         
+        if provider=='facebook':
+            user_query = GFUser.query(ndb.OR(
+                                        GFUser.fb_user_id == user_response['id'],
+                                        GFUser.email == user_response['email'].lower()
+                                        )
+                                )
+            user= user_query.get()
+            if  user and user.fb_user_id: 
+
+                user.fb_access_token = access_token
+                return user, ['FB_user_exists']
+            
+            
+        
+            if not user:
+                user= GFUser()
+                user.user_id="FB_"+user_response['id']
+                user.first_name = user_response['first_name']
+                user.last_name = user_response['last_name']
+                user.email = user_response['email']
+                user.full_name = user_response['name']
+                user.locale = user_response['locale']
+                status.append('user_added')
+
+            else: 
+                status.append('FB_user_data_added')
+
+            #add FB details
+            user.fb_user_id = user_response['id']
+            user.fb_first_name = user_response['first_name']
+            user.fb_last_name = user_response['last_name']
+            user.fb_email = user_response['email']
+            user.fb_profile = user_response['link']
+            user.fb_locale = user_response['locale']
+            user.fb_name = user_response['name']
+            user.fb_gender = user_response['gender']
+            user.fb_access_token = access_token
+        
+        
+
+        elif provider=='google':
+                user_query = GFUser.query(ndb.OR(
+                                        GFUser.fb_user_id == user_response['id'],
+                                        GFUser.email == user_response['email'].lower()
+                                        )
+                                )
+                user= user_query.get()
+                if  user and user.google_user_id: 
+
+                    user.google_access_token = access_token
+                    return user, ['google_user_exists']
+            
+                if not user:
+                    user= GFUser()
+                    user.user_id="google_"+user_response['id']
+                    user.first_name = user_response['given_name']
+                    user.last_name = user_response['family_name']
+                    user.email = user_response['email']
+                    user.full_name = user_response['name']
+                    status.append('user_added')
+
+                else: status.append('google_user_data_added')
+
+            #add FB details
+                user.google_user_id = user_response['id']
+                user.google_first_name = user_response['given_name']
+                user.google_last_name = user_response['family_name']
+                user.google_email = user_response['email']
+                user.google_profile = user_response['profile']
+                user.google_picture = user_response['picture']
+                user.google_locale = user_response['locale']
+                user.google_name = user_response['name']
+                user.google_access_token = access_token
+            
         user.put()
         return user, status
        
             
-    @staticmethod
-    def google_add_or_get(user_response, update=False):
-        '''
-        adds the user, if new, and returns it,  else just returns the user
-        '''
-        user_query = GFUser.query(ndb.OR(
-                                    GFUser.google_user_id == user_response['id'],
-                                    GFUser.email == user_response['email'].lower()
-                                    )
-                            )
-        
-        user= user_query.get()
-            
-        if  user and user.google_user_id: return user, ['Google_user_exists']
-        
-        status=[]
-        
-        if not user:
-            user= GFUser()
-            user.user_id="google_"+user_response['id']
-            user.first_name = user_response['first_name']
-            user.last_name = user_response['last_name']
-            user.email = user_response['email']
-            user.full_name = user_response['name']
-            status.append('user_added')
-         
-        else: status.append('google_user_data_added')
-            
-        #add FB details
-        user.XXXXXXXXX_user_id = user_response['id']
-        user.fb_first_name = user_response['first_name']
-        user.fb_last_name = user_response['last_name']
-        user.fb_email = user_response['email']
-        user.fb_profile = user_response['link']
-        user.fb_locale = ser_response['locale']
-        user.fb_name = user_response['name']
-        user.fb_gender = user_response['gender']
-        
-        user.put()
-        return user, status    
+
     
     
     
