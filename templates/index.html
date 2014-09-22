@@ -1,74 +1,16 @@
-<!DOCTYPE HTML>
-<!--
-	Solarize by TEMPLATED
-	templated.co @templatedco
-	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
--->
-<html>
-	<head>
-		<title>Lifelong Wellbeing Lab</title>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-		<script src="/static/js/jquery.min.js"></script>
-		<script src="/static/js/jquery.dropotron.min.js"></script>
-		<script src="/static/js/skel.min.js"></script>
-		<script src="/static/js/skel-layers.min.js"></script>
-		<script src="/static/js/init.js"></script>
-		<noscript>
-			<link rel="stylesheet" type="text/css" href="/static/css/skel.css" />
-			<link rel="stylesheet" href="/static/css/style.css" />
-		</noscript>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-	</head>
-	<body class="homepage">
+{% extends "base.html" %}
 
-		<!-- Header Wrapper -->
-			<div class="wrapper style1">
 			
 			<!-- Header -->
-				<div id="header">
-					<div   class="container">
-							
-						<!-- Logo -->
-							<h1><a href="#" id="logo">LLW</a></h1>
-						    <img src="/static/images/tpu-logo.gif">    
-						<!-- Nav -->
-							<nav id="nav">
-								<ul>
-									<li class="active"><a href="index.html">Home</a></li>
-									<li>
-										<a href="">Technologies</a>
-										<ul>
-											<li><a href="http://www.lifeparticipation.org/lifeshare.html">Lifeshare</a></li>
-											<li><a href="http://gymcentral.net">Gymcentral</a></li>
-											
-											<li><a href="#">PerTE</a></li>
-										</ul>
-									</li>
-									<li><a href="left-sidebar.html">Studies and Data</a>
-										<ul>
-											<li><a href="#">Happiness and older adults</a></li>
-											<li><a href="#">Buying happiness</a></li>
-											<li><a href="#">Activity, mental health and happiness</a></li>
-										</ul>			
-									</li>
-									<li><a href="pubs.html">Publications</a></li>
-                                    <li><a href="http://lwl.tpu.ru">Learning</a></li>
-									<li><a href="no-sidebar.html">About us</a>
-                                    <ul>
-											<li><a href="#">Our mission</a></li>
-											<li><a href="#">Our people</a></li>
-										</ul>
-                                    </li>
-								</ul>
-							</nav>
-	
-					</div>
-				</div>
-				
-			<!-- Banner -->
+            {% block head %}
+                {{ super() }}
+                <style type="text/css">
+                    .important { color: #336699; }
+                </style>
+            {% endblock %}
+
+
+{% block banner %}
 				<div id="banner">
 					<section class="container">
 						<h2>Lifelong Wellbeing Lab</h2>
@@ -76,8 +18,14 @@
 						<p></p>
 					</section>
 				</div>
+ {% endblock %}
 
-			</div>
+			
+{% block content %}
+
+
+
+			
 		
 		<!-- Section One -->
 			<div class="wrapper style2">
@@ -92,7 +40,7 @@
 						<div class="6u">
 							<h3>Our passion</h3>
 							<p>We want people to help people have fun and enjoy, savour life. We want to make sure people can’t wait to get up in the morning. We work specifically with older adults, because there worked so hard and surely deserve some fun..</p>
-							<a href="#" class="button">Read our mission statement</a>
+							<a href="about.html" class="button">Read our mission statement</a>
 						</div>
 					</div>
 				</section>
@@ -179,6 +127,8 @@
 				</section>
 			</div>
 
+
+ {% endblock %}
 	<!-- Footer -->
 		<div id="footer">
 			<section class="container">

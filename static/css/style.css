@@ -857,3 +857,20 @@
 		text-transform: uppercase;
 		font-weight: 700;
 	}
+
+/* HF */
+
+.pubs {
+    margin-left: 5%;
+    }
+.pubs ul {
+ 
+    margin-left: 5%;
+    
+}
+.pubs ul li {
+ 
+    list-style: square;
+}
+
+

@@ -15,18 +15,30 @@
 # limitations under the License.
 #
 import sys
-sys.path.append('handlers/')
+sys.path.append('flib/')
 sys.path.append('DB/')
 
 import webapp2
 from urlparse import urlparse
 import logging
-import BaseHandler
 import settings
-from BaseHandler import BaseRequestHandler, LoginManager
+import social_login
 from PUser import PUser
 import time
 
+
+import jinja2
+import os
+
+
+template_dir=os.path.join(os.path.dirname(__file__), 'templates')
+JINJA_ENVIRONMENT = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(template_dir),
+    #extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
+
+
+'''
 def get_current_user(request, cookie_name):
         user_id = BaseHandler.parse_cookie(request.cookies.get(cookie_name), settings.LOGIN_COOKIE_DURATION)
         
@@ -36,50 +48,44 @@ def get_current_user(request, cookie_name):
             user = PUser.query(PUser.user_id==user_id).get() 
             logging.error('\n ::user object:: returning user' + str(user))
             return PUser.get_by_user_id(user_id) 
-        
-        
-class LoginHandler(BaseRequestHandler):
-    def get(self):
-        
-        if '/fb/oauth_callback' in self.request.url:
-            logging.error("\n \n FB request: "+str(self.request.url))
-            
-            oauth_user_dictionary, access_token, errors = LoginManager.handle_oauth_callback(self.request, 'facebook')
-            
-            user, result = PUser.add_or_get_user(oauth_user_dictionary, access_token, 'facebook')
 
-            
-        elif '/google/oauth_callback' in self.request.url:
-            oauth_user_dictionary, access_token, errors = LoginManager.handle_oauth_callback(self.request, 'google')
-            
-            user, result = PUser.add_or_get_user(oauth_user_dictionary, access_token, 'google')
-            #set cookie
-            #redirect
-            pass
-        else:
-            logging.error('illegal callback invocation')
-        
-        logging.error("\n USER:")
-        logging.error(oauth_user_dictionary)
-        logging.error(user)
-        logging.error("\n END USER:")
-        BaseHandler.set_cookie(self.response, "user", str(user.user_id), expires=time.time() + settings.LOGIN_COOKIE_DURATION, encrypt=True)
-        self.redirect('/login.html')     
+  '''
+
+class BaseRequestHandler(webapp2.RequestHandler):
+    
+    
+    def write(self, *a, **kw):
+        self.response.out.write(*a, **kw)
+
+
+
+    def render(self, template_name, template_vars={}):
+     values={}
+     values.update(template_vars)
+     try:
+       template=JINJA_ENVIRONMENT.get_template(template_name)
+       self.write(template.render(**values))
+     except:
+       logging.error("Rendering Exception for " + template_name)
+       self.abort(404)
+
+      
+ 
         
         
         
 class MainHandler(BaseRequestHandler):
     def get(self):
         
-        params = {'fb_login_url': LoginManager.get_login_URL(self.request, 'facebook'),
-                 'google_login_url': LoginManager.get_login_URL(self.request, 'google')}    
+        '''
         user= get_current_user(self.request,'user')
         logging.error("returned user"+str(user))
         if user:
             params.update({'user':user})
             logging.error("USER EXISTS")
     
-        
+        '''
+        params={}
         logging.error(self.request)
         page = urlparse(self.request.url).path
         #logging.error(LoginManager.get_login_URL(self.request, 'facebook'))
@@ -94,7 +100,6 @@ class MainHandler(BaseRequestHandler):
         
 
 app = webapp2.WSGIApplication([
-    ('/fb/oauth_callback/?',LoginHandler),
-    ('/google/oauth_callback/?',LoginHandler),
+
     ('/.*', MainHandler)
 ], debug=True)

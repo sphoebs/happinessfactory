@@ -27,6 +27,7 @@
 		<!-- Header Wrapper -->
 			<div class="wrapper style1">
 			
+              {% block head %}   
 			<!-- Header -->
 				<div id="header">
 					<div   class="container">
@@ -39,15 +40,14 @@
 								<ul>
 									<li class="active"><a href="index.html">Home</a></li>
 									<li>
-										<a href="">Technologies</a>
+										Technologies
 										<ul>
 											<li><a href="http://www.lifeparticipation.org/lifeshare.html">Lifeshare</a></li>
 											<li><a href="http://gymcentral.net">Gymcentral</a></li>
-											
-											<li><a href="#">PerTE</a></li>
+											<li><a href="http://www.lifeparticipation.org/pertech.html">PerTE</a></li>
 										</ul>
 									</li>
-									<li><a href="left-sidebar.html">Studies and Data</a>
+									<li>Studies
 										<ul>
 											<li><a href="#">Happiness and older adults</a></li>
 											<li><a href="#">Buying happiness</a></li>
@@ -55,19 +55,21 @@
 										</ul>			
 									</li>
 									<li><a href="pubs.html">Publications</a></li>
-                                    <li><a href="http://lwl.tpu.ru">Learning</a></li>
-									<li><a href="no-sidebar.html">About us</a>
-                                    <ul>
+                                    <li><a href="learning.html">Learning</a></li>
+                                    <li><a href="events.html">Events</a></li>
+									<li><a href="about.html">About us</a>
+                                   <!-- <ul>
 											<li><a href="#">Our mission</a></li>
 											<li><a href="#">Our people</a></li>
-										</ul>
+										</ul>  -->
                                     </li>
 								</ul>
 							</nav>
 	
 					</div>
 				</div>
-				
+				{% endblock %}
+                
 			<!-- Banner -->
                         {% block banner %}
         
@@ -75,13 +77,7 @@
         
         
                        
-				<div id="banner">
-					<section class="container">
-						<h2>Lifelong Wellbeing Lab</h2>
-						<span>Make Somebody Happier Today</span>
-						<p></p>
-					</section>
-				</div>
+
                 
                  {% endblock %}
 
