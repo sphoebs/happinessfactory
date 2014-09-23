@@ -874,3 +874,31 @@
 }
 
 
+
+
+.team {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top:3em;
+}
+.team_member {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-right: 1em;
+
+}
+
+.team_member img {
+
+    border-radius: 50%;
+    border: 5px solid green;
+    width:10em;
+    height:  10em;
+
+
+}
+
