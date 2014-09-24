@@ -883,12 +883,15 @@
     align-items: center;
     flex-wrap: wrap;
     margin-top:3em;
+    margin-left: 5%;
+    width:90%;
 }
 .team_member {
     display: block;
     text-align: center;
     font-weight: bold;
     margin-right: 1em;
+    margin-top:2em;
 
 }
 
@@ -896,8 +899,8 @@
 
     border-radius: 50%;
     border: 5px solid green;
-    width:10em;
-    height:  10em;
+    width:15em;
+    height:  15em;
 
 
 }
