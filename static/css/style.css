@@ -898,9 +898,10 @@
 .team_member img {
 
     border-radius: 50%;
-    border: 5px solid green;
+    border: 6px solid green;
     width:15em;
     height:  15em;
+    border-image-slice: 60%;
 
 
 }
